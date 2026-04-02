@@ -39,7 +39,7 @@ x-usb-cameras-base: &usb-cameras-base
     dockerfile: docker/Dockerfile.cameras
     target: overlay
   command: >
-    bash -c "source /opt/ros/humble/setup.bash &&
+    bash -c "source /opt/ros/jazzy/setup.bash &&
     RMW=${RMW:-} source src/crisp_controllers_demos/scripts/setup_middleware.sh &&
     ros2 run usb_cam usb_cam_node_exe --ros-args -r __ns:=/${CAMERA_NAMESPACE:-camera} -p pixel_format:='mjpeg2rgb'"
 
@@ -51,7 +51,7 @@ x-realsense-cameras-overlay: &realsense-cameras-overlay
     dockerfile: docker/Dockerfile.cameras
     target: overlay
   command: >
-    bash -c "source /opt/ros/humble/setup.bash &&
+    bash -c "source /opt/ros/jazzy/setup.bash &&
     RMW=${RMW:-} source src/crisp_controllers_demos/scripts/setup_middleware.sh &&
     echo 'Using the serial number: ${SERIAL_NUMBER}' &&
     ros2 launch realsense2_camera rs_launch.py camera_name:=\${CAMERA_NAME:-camera} camera_namespace:=\${CAMERA_NAMESPACE:-camera} ${SERIAL_NUMBER:+serial_no:=_${SERIAL_NUMBER}}"
@@ -62,7 +62,7 @@ x-base: &base
     context: .
     dockerfile: docker/Dockerfile.robots
     args:
-      ROS_DISTRO: humble
+      ROS_DISTRO: jazzy
     target: base
 
   network_mode: host
@@ -149,7 +149,7 @@ services:
   launch_zenoh_router:
     <<: *base
     command: >
-      bash -lc "source /opt/ros/humble/setup.bash &&
+      bash -lc "source /opt/ros/jazzy/setup.bash &&
       export RMW_IMPLEMENTATION=rmw_zenoh_cpp &&
       export RUST_LOG=zenoh=info &&
       ros2 doctor -r | grep rmw_zenoh_cpp &&
@@ -160,7 +160,7 @@ services:
   launch_franka:
     <<: *franka-overlay
     command: >
-      bash -lc "source /opt/ros/humble/setup.bash &&
+      bash -lc "source /opt/ros/jazzy/setup.bash &&
       source install/setup.bash &&
       export ROS_NETWORK_INTERFACE=${ROS_NETWORK_INTERFACE:-lo} &&
       RMW=${RMW:-} source src/crisp_controllers_demos/scripts/setup_middleware.sh &&
@@ -170,7 +170,7 @@ services:
   launch_dual_franka:
     <<: *franka-overlay
     command: >
-      bash -lc "source /opt/ros/humble/setup.bash &&
+      bash -lc "source /opt/ros/jazzy/setup.bash &&
       source install/setup.bash &&
       export ROS_NETWORK_INTERFACE=${ROS_NETWORK_INTERFACE:-lo} &&
       RMW=${RMW:-} source src/crisp_controllers_demos/scripts/setup_middleware.sh &&
@@ -181,7 +181,7 @@ services:
   launch_kinova:
     <<: *kinova-overlay
     command: >
-      bash -c "source /opt/ros/humble/setup.bash &&
+      bash -c "source /opt/ros/jazzy/setup.bash &&
       source install/setup.bash &&
       export ROS_NETWORK_INTERFACE=${ROS_NETWORK_INTERFACE:-lo} &&
       RMW=${RMW:-} source src/crisp_controllers_demos/scripts/setup_middleware.sh &&
@@ -190,7 +190,7 @@ services:
   launch_iiwa:
     <<: *iiwa-overlay
     command: >
-      bash -c "source /opt/ros/humble/setup.bash &&
+      bash -c "source /opt/ros/jazzy/setup.bash &&
       source install/setup.bash &&
       export ROS_NETWORK_INTERFACE=${ROS_NETWORK_INTERFACE:-lo} &&
       RMW=${RMW:-} source src/crisp_controllers_demos/scripts/setup_middleware.sh &&
@@ -205,7 +205,7 @@ services:
     <<: *realsense-cameras-overlay
     container_name: crisp_controllers_demos_realsense_left
     command: >
-      bash -c "source /opt/ros/humble/setup.bash &&
+      bash -c "source /opt/ros/jazzy/setup.bash &&
       export ROS_NETWORK_INTERFACE=${ROS_NETWORK_INTERFACE:-lo} &&
       RMW=${RMW:-} source src/crisp_controllers_demos/scripts/setup_middleware.sh &&
       ros2 launch realsense2_camera rs_launch.py camera_name:=\${CAMERA_NAME:-left_wrist_camera} camera_namespace:=\${CAMERA_NAMESPACE:-left} ${SERIAL_NUMBER:+serial:=_${SERIAL_NUMBER}}"
@@ -216,7 +216,7 @@ services:
     environment:
       ROS_NETWORK_INTERFACE: ${ROS_NETWORK_INTERFACE:-lo}
     command: >
-      bash -c "source /opt/ros/humble/setup.bash &&
+      bash -c "source /opt/ros/jazzy/setup.bash &&
       RMW=${RMW:-} source src/crisp_controllers_demos/scripts/setup_middleware.sh &&
       ros2 launch realsense2_camera rs_launch.py camera_name:=\${CAMERA_NAME:-right_wrist_camera} camera_namespace:=\${CAMERA_NAMESPACE:-right}"
 

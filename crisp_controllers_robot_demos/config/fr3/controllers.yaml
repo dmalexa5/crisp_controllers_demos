@@ -2,6 +2,7 @@
   controller_manager:
     ros__parameters:
       update_rate: 1000  # Hz
+      enable_overrun: false
 
       joint_trajectory_controller:
         type: joint_trajectory_controller/JointTrajectoryController

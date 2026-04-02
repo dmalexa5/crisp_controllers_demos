@@ -1,4 +1,4 @@
-ARG ROS_DISTRO=humble
+ARG ROS_DISTRO=jazzy
 ARG CRISP_CONTROLLERS_VERSION=1.1.0
  
 FROM osrf/ros:${ROS_DISTRO}-desktop AS base
@@ -46,7 +46,6 @@ RUN apt-get update && \
     unzip \
     pip \
     python3-venv \
-    python3-ament-package \
     python3-flake8 \
     python3-rosdep \
     python3-setuptools \
@@ -83,17 +82,16 @@ WORKDIR /home/ros/ros2_ws
 
 FROM base AS franka
 
-# NOTE: it would be better to do separate builds for each repo but for testing this is enough
-# NOTE: There are still some bugs in the latest versions, for now using this commit
 # === FRANKA ROS2 ===
-RUN git clone https://github.com/danielsanjosepro/franka_ros2.git src/franka_ros2 \
+RUN git clone https://github.com/frankarobotics/franka_ros2.git -b $ROS_DISTRO src/franka_ros2 \
     && cd src/franka_ros2 \
     && cd /home/ros/ros2_ws \
-    && source /opt/ros/humble/setup.bash \
+    && source /opt/ros/$ROS_DISTRO/setup.bash \
     && sudo apt-get update \
     && vcs import src < src/franka_ros2/franka.repos --recursive --skip-existing \
     && rosdep update \
     && rosdep install --from-paths src --ignore-src --rosdistro $ROS_DISTRO -y \
+    && touch src/franka_ros2/franka_gazebo/COLCON_IGNORE \
     && colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release \
     && touch src/franka_ros2/COLCON_IGNORE src/libfranka/COLCON_IGNORE src/franka_description/COLCON_IGNORE
 

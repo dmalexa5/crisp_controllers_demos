@@ -57,12 +57,13 @@ def robot_description_dependent_nodes_spawner(
     robot_description = xacro.process_file(
         franka_xacro_filepath,
         mappings={
+            "ros2_control": "true",
             "arm_id": arm_id_str,
+            "arm_prefix": arm_prefix_str,
             "robot_ip": robot_ip_str,
             "hand": load_gripper_str,
             "use_fake_hardware": use_fake_hardware_str,
             "fake_sensor_commands": fake_sensor_commands_str,
-            "arm_prefix": arm_prefix_str,
             "mujoco_model": os.path.join(
                 get_package_share_directory("crisp_controllers_robot_demos"),
                 "config",
@@ -274,6 +275,7 @@ def generate_launch_description():
                 launch_arguments={
                     robot_ip_parameter_name: robot_ip,
                     use_fake_hardware_parameter_name: use_fake_hardware,
+                    "namespace": arm_prefix,
                 }.items(),
                 condition=IfCondition(load_gripper),
             ),
