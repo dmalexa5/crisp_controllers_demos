@@ -280,11 +280,11 @@ def generate_launch_description():
         condition=UnlessCondition(use_planning),
     )
 
-    joint_state_broadcaster_spawner = Node(
+    state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=[
-            "joint_state_broadcaster",
+            "state_broadcaster",
             "--controller-manager",
             [namespace, "controller_manager"],
         ],
@@ -311,35 +311,13 @@ def generate_launch_description():
         ],
     )
 
-    pose_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "pose_broadcaster",
-            "--controller-manager",
-            "/controller_manager",
-        ],
-    )
-
-    twist_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "twist_broadcaster",
-            "--controller-manager",
-            "/controller_manager",
-        ],
-    )
-
     nodes = [
         control_node,
         robot_state_pub_node,
         rviz_node,
         robot_controller_spawner,
-        joint_state_broadcaster_spawner,
+        state_broadcaster_spawner,
         cartesian_impedance_controller_spawner,
-        pose_broadcaster_spawner,
-        twist_broadcaster_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes)

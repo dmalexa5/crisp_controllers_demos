@@ -209,7 +209,7 @@ def generate_launch_description():
             Node(
                 package="controller_manager",
                 executable="spawner",
-                arguments=["joint_state_broadcaster"],
+                arguments=["state_broadcaster"],
                 output="screen",
             ),
             Node(
@@ -228,18 +228,6 @@ def generate_launch_description():
                 package="controller_manager",
                 executable="spawner",
                 arguments=["joint_trajectory_controller"],
-                output="screen",
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=["twist_broadcaster"],
-                output="screen",
-            ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=["pose_broadcaster"],
                 output="screen",
             ),
             Node(
