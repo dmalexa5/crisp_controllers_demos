@@ -34,7 +34,7 @@ from launch_ros.substitutions import FindPackageShare
 def robot_description_dependent_nodes_spawner(
     context: LaunchContext,
     robot_ip,
-    arm_id,
+    robot_type,
     use_fake_hardware,
     fake_sensor_commands,
     load_gripper,
@@ -42,7 +42,7 @@ def robot_description_dependent_nodes_spawner(
     start_robot_state_publisher,
 ):
     robot_ip_str = context.perform_substitution(robot_ip)
-    arm_id_str = context.perform_substitution(arm_id)
+    robot_type_str = context.perform_substitution(robot_type)
     arm_prefix_str = context.perform_substitution(arm_prefix)
     use_fake_hardware_str = context.perform_substitution(use_fake_hardware)
     fake_sensor_commands_str = context.perform_substitution(fake_sensor_commands)
@@ -58,7 +58,7 @@ def robot_description_dependent_nodes_spawner(
         franka_xacro_filepath,
         mappings={
             "ros2_control": "true",
-            "arm_id": arm_id_str,
+            "robot_type": robot_type_str,
             "arm_prefix": arm_prefix_str,
             "robot_ip": robot_ip_str,
             "hand": load_gripper_str,
@@ -111,6 +111,7 @@ def robot_description_dependent_nodes_spawner(
 
 
 def generate_launch_description():
+    robot_type_parameter_name = "robot_type"
     arm_id_parameter_name = "arm_id"
     arm_prefix_parameter_name = "arm_prefix"
     robot_ip_parameter_name = "robot_ip"
@@ -120,7 +121,7 @@ def generate_launch_description():
     use_rviz_parameter_name = "use_rviz"
     start_robot_state_publisher_name = "start_robot_state_publisher"
 
-    arm_id = LaunchConfiguration(arm_id_parameter_name)
+    robot_type = LaunchConfiguration(robot_type_parameter_name)
     arm_prefix = LaunchConfiguration(arm_prefix_parameter_name)
     robot_ip = LaunchConfiguration(robot_ip_parameter_name)
     load_gripper = LaunchConfiguration(load_gripper_parameter_name)
@@ -139,7 +140,7 @@ def generate_launch_description():
         function=robot_description_dependent_nodes_spawner,
         args=[
             robot_ip,
-            arm_id,
+            robot_type,
             use_fake_hardware,
             fake_sensor_commands,
             load_gripper,
@@ -155,8 +156,14 @@ def generate_launch_description():
                 description="Hostname or IP address of the robot.",
             ),
             DeclareLaunchArgument(
+                robot_type_parameter_name,
+                default_value="fr3",
+                description="Type of Franka arm used. This demo currently loads the FR3 config.",
+            ),
+            DeclareLaunchArgument(
                 arm_id_parameter_name,
-                description="ID of the type of arm used. Supported values: fer, fr3, fp3",
+                default_value="",
+                description="Deprecated alias kept for older launch commands; use robot_type instead.",
             ),
             DeclareLaunchArgument(
                 use_rviz_parameter_name,
@@ -263,6 +270,7 @@ def generate_launch_description():
                 launch_arguments={
                     robot_ip_parameter_name: robot_ip,
                     use_fake_hardware_parameter_name: use_fake_hardware,
+                    robot_type_parameter_name: robot_type,
                     "namespace": arm_prefix,
                 }.items(),
                 condition=IfCondition(load_gripper),
