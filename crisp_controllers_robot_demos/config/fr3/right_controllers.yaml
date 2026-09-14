@@ -60,7 +60,7 @@ right:
         - right_fr3_joint7
 
       end_effector_frame: right_fr3_hand_tcp
-      base_frame: right_base
+      base_frame: world
 
   gravity_compensation:
     ros__parameters:
@@ -74,7 +74,7 @@ right:
         - right_fr3_joint7
 
       end_effector_frame: right_fr3_hand_tcp
-      base_frame: right_base
+      base_frame: world
 
       task:
         k_pos_x: 0.0
@@ -103,7 +103,7 @@ right:
         - right_fr3_joint7
 
       end_effector_frame: right_fr3_hand_tcp
-      base_frame: right_base
+      base_frame: world
 
       filter:
         q: 0.5
@@ -141,7 +141,7 @@ right:
         - right_fr3_joint7
 
       end_effector_frame: right_fr3_hand_tcp
-      base_frame: right_base
+      base_frame: world
 
       task:
         k_pos_x: 0.0
@@ -185,7 +185,7 @@ right:
         - right_fr3_joint6
         - right_fr3_joint7
       end_effector_frame: right_fr3_hand_tcp
-      base_frame: right_base
+      base_frame: world
       k_fb: 0.9
       kd: 0.1
       joint_source_topic: /left/external_torques_joint_state

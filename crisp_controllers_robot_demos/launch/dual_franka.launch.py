@@ -1,6 +1,5 @@
 import os
 
-import xacro
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import (
@@ -49,16 +48,6 @@ def generate_launch_description():
         "fr3",
         "dual_fr3.rviz",
     )
-    franka_xacro_filepath = os.path.join(
-        get_package_share_directory("crisp_controllers_robot_demos"),
-        "config",
-        "fr3",
-        "fr3_dual.urdf.xacro",
-    )
-    robot_description = xacro.process_file(franka_xacro_filepath).toprettyxml(
-        indent="  "
-    )
-
     left_ld = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
@@ -70,6 +59,7 @@ def generate_launch_description():
         launch_arguments={
             "arm_id": "fr3",
             "arm_prefix": "left",
+            "mounting": "dual_left",
             "robot_ip": left_robot_ip,
             "use_rviz": "false",
             "use_fake_hardware": use_fake_hardware,
@@ -88,6 +78,7 @@ def generate_launch_description():
         launch_arguments={
             "arm_id": "fr3",
             "arm_prefix": "right",
+            "mounting": "dual_right",
             "robot_ip": right_robot_ip,
             "use_rviz": "false",
             "use_fake_hardware": use_fake_hardware,
@@ -101,16 +92,6 @@ def generate_launch_description():
         executable="rviz2",
         name="rviz2",
         arguments=["--display-config", rviz_file],
-    )
-
-    robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        name="robot_state_publisher",
-        output="screen",
-        parameters=[
-            {"robot_description": robot_description},
-        ],
     )
 
     # Merge both joint states
@@ -129,36 +110,9 @@ def generate_launch_description():
         ],
     )
 
-    world_to_left_static_tf = Node(
-        name="world_to_left_static_tf",
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        arguments=["0", "0", "0", "0", "0", "0", "world", "left_base"],
-        output="screen",
-    )
-    world_to_right_static_tf = Node(
-        name="world_to_right_static_tf",
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        arguments=[
-            "0",
-            "1.0",
-            "0",
-            "0",
-            "0",
-            "0",
-            "world",
-            "right_base",
-        ],  # x, y, z, roll, pitch, yaw
-        output="screen",
-    )
-
     nodes = [
         joint_state_publisher,
         rviz_node,
-        robot_state_publisher,
-        world_to_left_static_tf,
-        world_to_right_static_tf,
     ]
 
     return LaunchDescription([

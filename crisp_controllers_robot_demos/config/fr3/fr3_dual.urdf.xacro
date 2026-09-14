@@ -39,12 +39,12 @@
   <!-- Define the transform between both arms -->
   <joint name="left_base_to_world_joint" type="fixed"> <parent link="world"/>
     <child link="left_base"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <origin rpy="-0.7854 0 0" xyz="0 0.1065 0"/>
   </joint>
 
   <joint name="right_base_to_world_joint" type="fixed"> <parent link="world"/>
     <child link="right_base"/>
-    <origin rpy="0 0 0" xyz="0 1.0 0"/>
+    <origin rpy="0.7854 0 0" xyz="0 -0.1065 0"/>
   </joint>
 
 </robot>

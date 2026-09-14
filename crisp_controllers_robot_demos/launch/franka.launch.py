@@ -39,11 +39,13 @@ def robot_description_dependent_nodes_spawner(
     fake_sensor_commands,
     load_gripper,
     arm_prefix,
+    mounting,
     start_robot_state_publisher,
 ):
     robot_ip_str = context.perform_substitution(robot_ip)
     robot_type_str = context.perform_substitution(robot_type)
     arm_prefix_str = context.perform_substitution(arm_prefix)
+    mounting_str = context.perform_substitution(mounting)
     use_fake_hardware_str = context.perform_substitution(use_fake_hardware)
     fake_sensor_commands_str = context.perform_substitution(fake_sensor_commands)
     load_gripper_str = context.perform_substitution(load_gripper)
@@ -60,6 +62,7 @@ def robot_description_dependent_nodes_spawner(
             "ros2_control": "true",
             "robot_type": robot_type_str,
             "arm_prefix": arm_prefix_str,
+            "mounting": mounting_str,
             "robot_ip": robot_ip_str,
             "hand": load_gripper_str,
             "use_fake_hardware": use_fake_hardware_str,
@@ -114,6 +117,7 @@ def generate_launch_description():
     robot_type_parameter_name = "robot_type"
     arm_id_parameter_name = "arm_id"
     arm_prefix_parameter_name = "arm_prefix"
+    mounting_parameter_name = "mounting"
     robot_ip_parameter_name = "robot_ip"
     load_gripper_parameter_name = "load_gripper"
     use_fake_hardware_parameter_name = "use_fake_hardware"
@@ -123,6 +127,7 @@ def generate_launch_description():
 
     robot_type = LaunchConfiguration(robot_type_parameter_name)
     arm_prefix = LaunchConfiguration(arm_prefix_parameter_name)
+    mounting = LaunchConfiguration(mounting_parameter_name)
     robot_ip = LaunchConfiguration(robot_ip_parameter_name)
     load_gripper = LaunchConfiguration(load_gripper_parameter_name)
     use_fake_hardware = LaunchConfiguration(use_fake_hardware_parameter_name)
@@ -145,6 +150,7 @@ def generate_launch_description():
             fake_sensor_commands,
             load_gripper,
             arm_prefix,
+            mounting,
             start_robot_state_publisher,
         ],
     )
@@ -192,6 +198,12 @@ def generate_launch_description():
                 arm_prefix_parameter_name,
                 default_value="",
                 description="The prefix of the arm.",
+            ),
+            DeclareLaunchArgument(
+                mounting_parameter_name,
+                default_value="none",
+                description="Fixed mounting preset for the robot model.",
+                choices=["none", "dual_left", "dual_right"],
             ),
             DeclareLaunchArgument(
                 start_robot_state_publisher_name,

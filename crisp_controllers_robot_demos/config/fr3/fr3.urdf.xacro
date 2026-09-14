@@ -30,7 +30,7 @@
                       fake_sensor_commands="${fake_sensor_commands}"
                       gazebo_effort="${gazebo_effort}"
                       no_prefix="${no_prefix}"
-                      arm_prefix="${arm_prefix}"
+                      arm_prefix="${arm_prefix_modified}"
                       connected_to="${arm_prefix_modified}base">
   </xacro:franka_robot>
 

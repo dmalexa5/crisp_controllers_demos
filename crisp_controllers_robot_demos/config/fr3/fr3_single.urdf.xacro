@@ -38,6 +38,9 @@
   <!-- Type of Franka arm -->
   <xacro:arg name="robot_type" default="fr3" />
 
+  <!-- Fixed mounting preset for multi-arm setups -->
+  <xacro:arg name="mounting" default="none" />
+
   <xacro:arg name="has_camera" default="false" />
 
 <xacro:property name="arm_prefix_modified" value="${'' if xacro.arg('arm_prefix') == '' else xacro.arg('arm_prefix') + '_'}" />
@@ -50,5 +53,23 @@
     arm_prefix="$(arg arm_prefix)"
     hand="$(arg load_gripper)"
   />
+
+  <xacro:if value="${xacro.arg('mounting') == 'dual_left'}">
+    <link name="world"/>
+    <joint name="left_base_to_world_joint" type="fixed">
+      <parent link="world"/>
+      <child link="left_base"/>
+      <origin rpy="-0.7854 0 0" xyz="0 0.1065 0"/>
+    </joint>
+  </xacro:if>
+
+  <xacro:if value="${xacro.arg('mounting') == 'dual_right'}">
+    <link name="world"/>
+    <joint name="right_base_to_world_joint" type="fixed">
+      <parent link="world"/>
+      <child link="right_base"/>
+      <origin rpy="0.7854 0 0" xyz="0 -0.1065 0"/>
+    </joint>
+  </xacro:if>
 
 </robot>
