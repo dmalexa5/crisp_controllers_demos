@@ -249,12 +249,14 @@ def generate_launch_description():
                 arguments=["joint_trajectory_controller"],
                 output="screen",
             ),
-            Node(
-                package="controller_manager",
-                executable="spawner",
-                arguments=["external_torques_broadcaster"],
-                output="screen",
-            ),
+            # franka_force_feedback_controllers is deprecated and is not built
+            # in this workspace; loading external_torques_broadcaster fails.
+            # Node(
+            #     package="controller_manager",
+            #     executable="spawner",
+            #     arguments=["external_torques_broadcaster"],
+            #     output="screen",
+            # ),
             Node(
                 package="controller_manager",
                 executable="spawner",
